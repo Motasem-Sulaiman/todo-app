@@ -1,9 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useContext } from 'react';
+import { SettingsContext } from '../../Context/Settings/index'; 
 import useForm from '../../hooks/form.jsx';
+import List from '../List/index.jsx'
 
 import { v4 as uuid } from 'uuid';
+import { Pagination } from '@mantine/core';
+
+
+
 
 const ToDo = () => {
+  
+  const settings =useContext(SettingsContext);
+  
 
   const [defaultValues] = useState({
     difficulty: 4,
@@ -11,6 +20,7 @@ const ToDo = () => {
   const [list, setList] = useState([]);
   const [incomplete, setIncomplete] = useState([]);
   const { handleChange, handleSubmit } = useForm(addItem, defaultValues);
+  const [currentPage, setCurrentPage] = useState(1);
 
   function addItem(item) {
     item.id = uuid();
@@ -43,16 +53,17 @@ const ToDo = () => {
     document.title = `To Do List: ${incomplete}`;
   }, [list]);
 
+
   return (
     <>
-      <header>
+      <div className="ToDo">
         <h1>To Do List: {incomplete} items pending</h1>
-      </header>
+      
 
       <form onSubmit={handleSubmit}>
 
         <h2>Add To Do Item</h2>
-
+    
         <label>
           <span>To Do Item</span>
           <input onChange={handleChange} name="text" type="text" placeholder="Item Details" />
@@ -73,18 +84,22 @@ const ToDo = () => {
         </label>
       </form>
 
-      {list.map(item => (
-        <div key={item.id}>
-          <p>{item.text}</p>
-          <p><small>Assigned to: {item.assignee}</small></p>
-          <p><small>Difficulty: {item.difficulty}</small></p>
-          <div onClick={() => toggleComplete(item.id)}>Complete: {item.complete.toString()}</div>
-          <hr />
-        </div>
-      ))}
 
+      <List items={list} toggleComplete={toggleComplete} />
+      
+     
+        <Pagination
+          itemsPerPage={settings.items}
+          total={10}
+          page={currentPage}
+          onChange={(newPage) => setCurrentPage(newPage)}
+        />
+   
+      
+      </div>
     </>
   );
 };
 
 export default ToDo;
+
