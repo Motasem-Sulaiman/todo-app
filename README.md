@@ -1,7 +1,7 @@
 # React + Vite
 
-[pull-request](https://github.com/Motasem-Sulaiman/todo-app/pull/1)
+[pull-request]()
 
-[repo](https://github.com/Motasem-Sulaiman/todo-app)
+[repo]()
 
-[online-version](https://vvlvtj-5173.csb.app/)
+[online-version]()
