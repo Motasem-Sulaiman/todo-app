@@ -9,7 +9,7 @@ const List = (props) => {
 
 
   })
-  // {localStorage.setItem('items', JSON.stringify(props.items))}
+  {localStorage.setItem('items', JSON.stringify(props.items))}
 
   return (
     <>

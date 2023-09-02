@@ -15,12 +15,12 @@ const ToDo = () => {
   const [defaultValues] = useState({
     difficulty: 4,
   });
-  // const [list, setList] = useState([]);
+
   const [incomplete, setIncomplete] = useState([]);
   const { handleChange, handleSubmit } = useForm(addItem, defaultValues);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // const [arr, setArr] = useState([]);
+
   const [list, setList] = useState(() => {
     const storedItems = localStorage.getItem("items");
     return storedItems ? JSON.parse(storedItems) : [];
@@ -52,11 +52,11 @@ const ToDo = () => {
     localStorage.setItem("items", JSON.stringify(items));
   }
 
-  // const filteredList = settings.complete
-  //   ? list.filter((item) => !item.complete)
-  //   : list;
+  const filteredList = settings.complete
+    ? list.filter((item) => !item.complete)
+    : list;
 
-  const paginatedList = list.slice(
+  const paginatedList = filteredList.slice(
     (currentPage - 1) * settings.items,
     currentPage * settings.items
   );
