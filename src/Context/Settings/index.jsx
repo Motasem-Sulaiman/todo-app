@@ -12,6 +12,7 @@ export default function Settings(props) {
     difficulty: "difficulty",
     setItems: setItems,
     setCompleted: setCompleted,
+    
 
   };
    useEffect(()=>{

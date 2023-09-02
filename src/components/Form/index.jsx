@@ -30,6 +30,11 @@ export default function Form() {
         <input type="checkbox" name="complete" />
         <input type="submit" />
       </form>
+      <h2>Updated Settings</h2>
+      <p>complete:  {state.complete.toString()}</p>
+      <p>items per page:  {state.items}</p>
     </>
+
+   
   );
 }
