@@ -17,14 +17,14 @@ export default function App() {
     
         <Settings>
         <LoginProvider>
+        
+          <Login />
+
+          <Auth>
           <Routes>
             <Route path="/" element={<ToDo />} />
             <Route path="/settings" element={<Form />} />
           </Routes>
-          <Login />
-
-          <Auth>
-            <div>Any valid user can see this</div>
           </Auth>
 
           <Auth capability="create">
