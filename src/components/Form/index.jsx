@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { SettingsContext } from "../../Context/Settings/index";
+import { SettingsContext } from "../../Context/Settings/settings";
 import Header from "../Header";
 
 export default function Form() {
