@@ -4,6 +4,8 @@ import useForm from "../../hooks/form.jsx";
 import List from "../List/index.jsx";
 import Form from "../Form/index";
 import Header from "../Header/index";
+import { When } from "react-if";
+import {LoginContext} from '../../Context/Settings/context';
 import { v4 as uuid } from "uuid";
 import './style.scss'
 
@@ -11,6 +13,7 @@ import { Pagination } from "@mantine/core";
 
 const ToDo = () => {
   const settings = useContext(SettingsContext);
+  const Login=useContext(LoginContext)
 
   const [defaultValues] = useState({
     difficulty: 4,
@@ -67,15 +70,17 @@ const ToDo = () => {
   }, [list]);
 
   return (
+
     
     <>
     <Header/>
-    
+    <When condition={Login.loggedIn}>
       <div className="grid">
      
         
       
         <div className="item1">
+          
         <h1 className="todo">To Do List: {incomplete} items pending</h1>
         <form onSubmit={handleSubmit} >
           <h2>Add To Do Item</h2>
@@ -121,6 +126,7 @@ const ToDo = () => {
             <button type="submit" id="btn">Add Item</button>
           </label>
         </form>
+      
         </div>
 
         <List items={paginatedList} toggleComplete={toggleComplete} />
@@ -132,8 +138,9 @@ const ToDo = () => {
           onChange={(newPage) => setCurrentPage(newPage)}
           withPagesCount
         />
-       
+        
       </div>
+      </When>
     </>
   );
 };
