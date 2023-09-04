@@ -23,7 +23,7 @@ export default function App() {
             <Route path="/settings" element={<Form />} />
           </Routes>
           {/* <Login /> */}
-          <Auth>
+          {/* <Auth>
           
           </Auth>
 
@@ -37,7 +37,7 @@ export default function App() {
 
           <Auth capability="delete">
             <div>Users with delete access can see this</div>
-          </Auth>
+          </Auth> */}
           </LoginProvider>
         </Settings>
  
