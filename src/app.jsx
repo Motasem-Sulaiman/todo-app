@@ -22,7 +22,7 @@ export default function App() {
             <Route path="/" element={<ToDo />} />
             <Route path="/settings" element={<Form />} />
           </Routes>
-          <Login />
+          {/* <Login /> */}
           <Auth>
           
           </Auth>
