@@ -1,9 +1,8 @@
 # React + Vite
 
-[pull-request-1](https://github.com/Motasem-Sulaiman/todo-app/pull/4)
+[pull-request](https://github.com/Motasem-Sulaiman/todo-app/pull/4)
 
-
-[pull-request-2](https://github.com/Motasem-Sulaiman/todo-app/pull/6)
+<!-- [pull-request-2](https://github.com/Motasem-Sulaiman/todo-app/pull/6) -->
 
 [repo](https://github.com/Motasem-Sulaiman/todo-app)
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { SettingsContext } from "../../Context/Settings/index";
+import { SettingsContext } from "../../Context/Settings/settings";
 import useForm from "../../hooks/form.jsx";
 import List from "../List/index.jsx";
 import Form from "../Form/index";
