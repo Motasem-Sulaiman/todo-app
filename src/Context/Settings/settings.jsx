@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
+
 
 export const SettingsContext = React.createContext();
 export default function Settings(props) {
   const [items, setItems] = useState(3);
   const [completed, setCompleted] = useState(true);
-
+  
   const state = {
     items: items,
     complete: completed,
