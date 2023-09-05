@@ -12,14 +12,17 @@ export default function Login(props){
 
     let handleUsername = (e) => {
   setUsername(e.target.value )
+
  };
     let handlePassword = (e) => {
      setPassword(e.target.value )
+   
  };
 
      let  handleSubmit = (e) => {
    e.preventDefault();
    login.login(username, password);
+   
  };
  return(
    <div className={'log'}>
