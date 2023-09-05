@@ -11,9 +11,9 @@ const List = (props) => {
     <div>
       {props.items.map((item) => (
         <div className="list-item" key={item.id}>
-          <p>{item.text}</p>
+          <p>{item.item}</p>
           <p>
-            <small>Assigned to: {item.assignee}</small>
+            <small>Assigned to: {item.assignedTo}</small>
           </p>
           <p>
             <small>Difficulty: {item.difficulty}</small>

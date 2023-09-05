@@ -4,6 +4,7 @@ import LoginProvider from "../src/Context/Settings/context";
 import Auth from "../src/components/auth/auth"
 import Login from "../src/components/auth/login"
 import ToDo from "./components/todo/todo.jsx";
+import SignUp from "./components/auth/signup";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 // import './style.scss'
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="/" element={<ToDo />} />
             <Route path="/settings" element={<Form />} />
           </Routes>
+         
           {/* <Login /> */}
           {/* <Auth>
           
@@ -38,8 +40,11 @@ export default function App() {
           <Auth capability="delete">
             <div>Users with delete access can see this</div>
           </Auth> */}
+           <SignUp/>
           </LoginProvider>
+          
         </Settings>
+        
  
     </MantineProvider>
   );

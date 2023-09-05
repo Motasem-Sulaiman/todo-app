@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import cookie from "react-cookies";
 import jwt_decode from "jwt-decode";
+import superagent  from "superagent";
+import base64 from 'base-64'
+import axios from "axios";
+
+// const API = `https://auth-api-33k1.onrender.com`
 
 const testUsers = {
   Admininistrator: {
@@ -33,36 +38,78 @@ export const LoginContext = React.createContext();
 
 function LoginProvider(props) {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState({ capabilities: [] });
+  const [user, setUser] = useState({capabilities: cookie.load('capabilities')} || "");
+  
+
   const [error, setError] = useState(null);
 
 
-  let can = (capability) => {
-    return user?.capabilities?.includes(capability);
+ 
+  let addItem = async (item) => {
+    try {
+      const obj = {
+        item: item.text,
+        assignedTo: item.assignee,
+        difficulty: item.difficulty,
+        complete: item.complete,
+      };
+      const url = `https://auth-api-33k1.onrender.com/api/v1/todo`;
+      const res = await axios.post(url,obj);
+  
+      console.log(res.data)
+    } catch (error) {
+      console.log(`error add  post ${error}`);
+    }
   };
 
-  let login = async (username, password) => {
-    let auth = testUsers[username];
+  const login = async (username, password) => {
+    try {
+      const response = await superagent
+      .post("https://auth-api-33k1.onrender.com/signin")
+      .set('authorization', `Basic ${base64.encode(`${username}:${password}`)}`)
+      console.log("body>>>>>", response.body)
+        validateToken(response.body);
+    } catch (err) {
+        console.log('///////')
+    }
+  }
 
-    if (auth && auth.password === password) {
+  let signup = async (username, password,role) => {
+    const obj={
+      username:username,
+      password:password,
+      role:role,
+    }
       try {
-        validateToken(auth.token);
-        console.log(auth.token);
+        const url = `https://auth-api-33k1.onrender.com/signup`;
+        const res=await axios.post(url,obj)
+        console.log(res.data)
+       
       } catch (e) {
         setLoginState(false, null, {}, e);
         console.error(e);
       }
-    }
+  
   };
 
   let logout = () => {
     setLoginState(false, null, {});
+    cookie.remove("token")
+    cookie.remove("capabilities")
+
   };
 
-  let validateToken = (token) => {
+  let validateToken = (userInfo) => {
     try {
-      let validUser = jwt_decode(token);
-      setLoginState(true, token, validUser);
+      let validUser = jwt_decode(userInfo.token);
+      cookie.save("token", userInfo.token);
+      cookie.save("capabilities", userInfo.user.capabilities);
+      // setLoginState(true, user.token, validUser);
+      setLoggedIn(true)
+      setUser(userInfo.user)
+      console.log(userInfo.user.capabilities)
+      console.log("---------------------------------",userInfo.user)
+    
     } catch (e) {
       setLoginState(false, null, {}, e);
       console.log("Token Validation Error", e);
@@ -70,19 +117,34 @@ function LoginProvider(props) {
   };
 
   let setLoginState = (loggedIn, token, user, error) => {
-    cookie.save("auth", token);
+    cookie.save("token", token);
     setLoggedIn(loggedIn);
     setUser(user);
     setError(error || null);
   };
 
   useEffect(() => {
-    const qs = new URLSearchParams(window.location.search);
-    const cookieToken = cookie.load("auth");
-    const token = qs.get("token") || cookieToken || null;
-    validateToken(token);
+    
+    // const qs = new URLSearchParams(window.location.search);
+    // const cookieToken = cookie.load("auth");
+    // const token = qs.get("token") || cookieToken || null;
+    // validateToken(token);
+    const myToken = cookie.load('token');
+    if (myToken) {
+      
+
+        setLoggedIn(true);
+      
+    } else {
+        setLoggedIn(false);
+    
+    }
   }, []);
 
+  let can = (capability) => {
+    
+    return user?.capabilities?.includes(capability);
+  };
   let state = {
     loggedIn: loggedIn,
     can: can,
@@ -90,6 +152,8 @@ function LoginProvider(props) {
     logout: logout,
     user: user,
     error: error,
+    addItem: addItem,
+    signup:signup,
   };
 
   return (

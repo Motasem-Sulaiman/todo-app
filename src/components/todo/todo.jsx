@@ -3,10 +3,12 @@ import { SettingsContext } from "../../Context/Settings/settings";
 import useForm from "../../hooks/form.jsx";
 import List from "../List/index.jsx";
 import Form from "../Form/index";
+import { SuperAgent } from "superagent";
 import Header from "../Header/index";
 import { When } from "react-if";
 import { LoginContext } from "../../Context/Settings/context";
 import { v4 as uuid } from "uuid";
+import axios from "axios";
 import Auth from "../auth/auth";
 import "./style.scss";
 
@@ -23,11 +25,13 @@ const ToDo = () => {
   const [incomplete, setIncomplete] = useState([]);
   const { handleChange, handleSubmit } = useForm(addItem, defaultValues);
   const [currentPage, setCurrentPage] = useState(1);
+  
 
-  const [list, setList] = useState(() => {
-    const storedItems = localStorage.getItem("items");
-    return storedItems ? JSON.parse(storedItems) : [];
-  });
+  // const [list, setList] = useState(() => {
+  //   const storedItems = localStorage.getItem("items");
+  //   return storedItems ? JSON.parse(storedItems) : [];
+  // });
+  const [list, setList] = useState([]);
 
   function addItem(item) {
     item.id = uuid();
@@ -35,26 +39,48 @@ const ToDo = () => {
     console.log(item);
     const updatedList = [...list, item];
     setList(updatedList);
-    localStorage.setItem("items", JSON.stringify(updatedList));
+    // localStorage.setItem("items", JSON.stringify(updatedList));
+    Login.addItem(item);
   }
+  useEffect( () => {
+    const url = `https://auth-api-33k1.onrender.com/api/v1/todo`;
+     axios.get(url)
+     .then((res)=>{
+// console.log(res.data)
+      setList(res.data);
+     })
 
-  function deleteItem(id) {
-    const items = list.filter((item) => item.id !== id);
-    setList(items);
-    localStorage.setItem("items", JSON.stringify(items));
+  },[list] );
+
+ async function deleteItem(id) {
+     await axios.delete(`https://auth-api-33k1.onrender.com/api/v1/todo/${id}`)
+     const res=await axios.get(`https://auth-api-33k1.onrender.com/api/v1/todo`)
+    // const items = list.filter((item) => item.id !== id);
+    setList(res.data);
+    // localStorage.setItem("items", JSON.stringify(items));
   }
 
   function toggleComplete(id) {
     const items = list.map((item) => {
-      if (item.id == id) {
-        item.complete = !item.complete;
-      }
-      return item;
-    });
-
-    setList(items);
-    localStorage.setItem("items", JSON.stringify(items));
-  }
+    if (item.id == id) {
+      item.complete = !item.complete;
+    const url= `https://auth-api-33k1.onrender.com/api/v1/todo/${id}`
+    axios.put(url,item).then((res)=>{
+      //either:
+      // const dataArray = Object.values(res.data);
+      // console.log(dataArray)
+      // const newList = [...list, ...dataArray];
+      // console.log(newList)
+      // setList(newList);
+      //or:
+      setList([res.data])
+    })
+    }
+    return item;
+  });
+  // setList(items);
+  // localStorage.setItem("items", JSON.stringify(items));
+}
 
   const filteredList = !settings.complete
     ? list.filter((item) => !item.complete)
@@ -129,11 +155,15 @@ const ToDo = () => {
             </form>
           </div>
 
-          <List deleteItem={deleteItem} items={paginatedList} toggleComplete={toggleComplete} />
+          <List
+            deleteItem={deleteItem}
+            items={paginatedList}
+            toggleComplete={toggleComplete}
+          />
 
           <Pagination
             itemsPerPage={settings.items}
-            total={filteredList.length}
+            total={filteredList.length / settings.items + 2}
             page={currentPage}
             onChange={(newPage) => setCurrentPage(newPage)}
             withPagesCount
